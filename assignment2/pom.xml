@@ -25,6 +25,44 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
+    <dependency>
+       <groupId>org.apache.lucene</groupId>
+       <artifactId>lucene-core</artifactId>
+       <version>8.7.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-analyzers-common -->
+    <dependency>
+       <groupId>org.apache.lucene</groupId>
+       <artifactId>lucene-analyzers-common</artifactId>
+       <version>8.7.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser -->
+    <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-queryparser</artifactId>
+        <version>8.7.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-queries -->
+    <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-queries</artifactId>
+        <version>8.7.0</version>
+    </dependency>
+     <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-demo -->
+     <dependency>
+         <groupId>org.apache.lucene</groupId>
+         <artifactId>lucene-demo</artifactId>
+         <version>8.7.0</version>
+     </dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-codecs -->
+<dependency>
+    <groupId>org.apache.lucene</groupId>
+    <artifactId>lucene-codecs</artifactId>
+    <version>8.7.0</version>
+    <scope>test</scope>
+</dependency>
+
   </dependencies>
 
   <build>
@@ -51,6 +89,15 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+	  <configuration>
+        	<archive>
+         	   <manifest>
+          		  <addClasspath>true</addClasspath>
+          		  <classpathPrefix>lib/</classpathPrefix>
+           		 <mainClass>iraws_group.Main</mainClass>
+         	   </manifest>
+        	</archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
