@@ -17,11 +17,13 @@ public class Index {
 
     public ArrayList topics;
 
-    public Index() {
-        System.out.println("Initializing Indexer");
+    public static void main(String[] args) {
+        System.out.println("In index.java");
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        ParseTopics();
     }
 
-    public void ParseTopics() {
+    public static void ParseTopics() {
         try {
             File topicsFile = new File(Constants.REL_TOPICS_LOC);
             Scanner topicsReader = new Scanner(topicsFile);
@@ -36,8 +38,11 @@ public class Index {
             //to make sure it's parsing okay
             ArrayList<Document> documents = new ArrayList<Document>();
             while (topicsReader.hasNextLine()) {
-                System.out.println("Entering while loop..");
                 currLine = topicsReader.nextLine();
+
+                if (currLine.isEmpty())
+                    continue;
+
                 Constants.Tag tagOnCurrLine = getTag(currLine);
                 switch(tagOnCurrLine) {
                     case Open: 
@@ -45,31 +50,37 @@ public class Index {
                         doc = new Document();
                         currTag = Constants.Tag.Open;
                         break;
-                    case Close: 
-                        field = new TextField(currTag.toString(), currFieldEntry, Field.Store.YES);
-                        documents.add(doc);
-                        currFieldEntry = "";
-                        currTag = Constants.Tag.Open;
                     case Num: 
                         Field numField = new TextField(Constants.Tag.Num.toString(), currLine.split(" ")[2].trim(), Field.Store.YES);
                         doc.add(numField);
+                        System.out.println("Adding Num: " + currLine.split(" ")[2].trim() );
                         currTag = Constants.Tag.Num;
                         break;
                     case Title: 
                         Field titleField = new TextField(Constants.Tag.Title.toString(), currLine.substring(Constants.TITLE_TAG.length()).trim(), Field.Store.YES);
                         doc.add(titleField);
+                        System.out.println("Adding Title: " + currLine.substring(Constants.TITLE_TAG.length()).trim());
                         currTag = Constants.Tag.Title;
                         break;
-                    default:
-                        if (currTag == tagOnCurrLine) {
-                            currFieldEntry += " " + currLine.trim();
-                        }
-                        else {
-                            field = new TextField(currTag.toString(), currFieldEntry, Field.Store.YES);
-                            doc.add(field);
-                            currTag = tagOnCurrLine;
+                    case Desc: 
                             currFieldEntry = "";
-                        }
+                            currTag = Constants.Tag.Desc;
+                        break;
+                    case Narr: 
+                            currFieldEntry = "";
+                            currTag = Constants.Tag.Narr;
+                        break;
+                    case Close: 
+                        System.out.println("Adding Narr: " + currFieldEntry);
+                        field = new TextField(currTag.toString(), currFieldEntry, Field.Store.YES);
+                        documents.add(doc);
+                        currFieldEntry = "";
+                        currTag = Constants.Tag.Close;
+                        break;
+                    case None: 
+                        currFieldEntry += currLine.trim();
+                        break;
+                    default:
                         break;
                 }
             }
@@ -80,7 +91,7 @@ public class Index {
         }
     }
     
-    private Constants.Tag getTag(String currLine) {
+    private static Constants.Tag getTag(String currLine) {
        if (currLine.indexOf(Constants.OPEN_TOP_TAG) == 0) return Constants.Tag.Open;
        if (currLine.indexOf(Constants.NUM_TAG) == 0) return Constants.Tag.Num;
        if (currLine.indexOf(Constants.TITLE_TAG) == 0) return Constants.Tag.Title;
