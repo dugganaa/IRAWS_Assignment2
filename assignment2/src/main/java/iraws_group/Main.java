@@ -25,7 +25,7 @@ public class Main{
             System.out.println("Hello I am index");
             Index.main(args);
         } else if (Integer.parseInt(args[0]) == 2){
-            System.out.println("Hello i am seacrh");
+            System.out.println("Hello i am search");
             Search.main(args);
         }
     }
