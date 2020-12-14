@@ -31,20 +31,12 @@ public class Search {
             
             for(ParsedTopic topic : parsedTopics) {
                 try {
-                    //Use more fields from topic
-                    //BooleanQuery query = GetQuery(analyzer, topic);
-                    //ScoreDoc[] hits = searcher.search(query, 1000).scoreDocs;
-                    
-                    //Currently only uses description of topic
-                    ScoreDoc[] hits = searcher.search(queryParser.parse(topic.getDesc()), 1000).scoreDocs;
+                    ScoreDoc[] hits = searcher.search(queryParser.parse(queryBuilder(topic)), 1000).scoreDocs;
                     System.out.println("Found " + hits.length + " hits");
                     
                     for (int i = 0; i < hits.length-1; i++)
                     {
                         Document hitDoc = searcher.doc(hits[i].doc);
-                        //System.out.println("Got score of: " + hits[i].score);
-                        
-                        //QueryID null null DocumentID Rank Score null
                         resultsWriter.println(topic.getNum() + " 0 " + hitDoc.get("ID") + " " + i + " " + hits[i].score + " 0");
                     }
                 }
@@ -79,7 +71,6 @@ public class Search {
         try {
             File topicsFile = new File(Constants.REL_TOPICS_LOC);
             Scanner topicsReader = new Scanner(topicsFile);
-
             String currLine = "";
             String currFieldEntry = "";
             ParsedTopic parsedTopic = new ParsedTopic();
@@ -144,5 +135,11 @@ public class Search {
             e.printStackTrace();
         }
         return parsedTopics;
+    }
+
+    private static String queryBuilder(ParsedTopic topic){
+        String strOne = topic.getTitle();
+        String strTwo = topic.getDesc();
+        return strOne.concat(strTwo);
     }
 }
