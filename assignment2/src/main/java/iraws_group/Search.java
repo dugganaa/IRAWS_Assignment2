@@ -141,5 +141,6 @@ public class Search {
         String strOne = topic.getTitle();
         String strTwo = topic.getDesc();
         return strOne.concat(strTwo);
+        //test change
     }
 }
