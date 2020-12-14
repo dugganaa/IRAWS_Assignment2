@@ -27,7 +27,7 @@ public class Search {
 			PrintWriter resultsWriter = new PrintWriter(new FileOutputStream(Constants.RESULTS_LOC, false));
 			Analyzer analyzer = new ModifiableTokenizer();
 		    IndexSearcher searcher = Utilities.GetSearcher(Constants.INDEX_LOC);
-            QueryParser queryParser = Utilities.GetQueryParser(analyzer);
+            MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString()}, analyzer);
             
             for(ParsedTopic topic : parsedTopics) {
                 try {
