@@ -25,8 +25,14 @@ public class Search {
         try
 		{
 			PrintWriter resultsWriter = new PrintWriter(new FileOutputStream(Constants.RESULTS_LOC, false));
-			Analyzer analyzer = new ModifiableTokenizer();
-		    IndexSearcher searcher = Utilities.GetSearcher(Constants.INDEX_LOC);
+            Analyzer analyzer = new ModifiableTokenizer();
+            IndexSearcher searcher;
+            if (args.length > 1) {
+                searcher = Utilities.GetSearcher(Constants.INDEX_LOC, Constants.SimilarityClasses.values()[Integer.parseInt(args[1])], Float.parseFloat(args[2]));
+            }
+            else {
+                searcher = Utilities.GetSearcher(Constants.INDEX_LOC);
+            }
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString()}, analyzer);
             
             for(ParsedTopic topic : parsedTopics) {
@@ -37,7 +43,7 @@ public class Search {
                     for (int i = 0; i < hits.length-1; i++)
                     {
                         Document hitDoc = searcher.doc(hits[i].doc);
-                        resultsWriter.println(topic.getNum() + " 0 " + hitDoc.get("ID") + " " + i + " " + hits[i].score + " 0");
+                        resultsWriter.println(topic.getNum() + " 0 " + hitDoc.get("DOCNO") + " " + i + " " + hits[i].score + " 0");
                     }
                 }
                 catch(Exception e)
@@ -178,7 +184,7 @@ public class Search {
             finalString = finalString.concat(str);
         }
         //test change
-        System.out.println(finalString);
+        //System.out.println(finalString);
         return finalString;
     }
 }

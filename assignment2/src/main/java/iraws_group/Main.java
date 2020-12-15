@@ -16,10 +16,14 @@ import java.io.BufferedReader;
 import java.util.Scanner;
 import java.io.StringReader;
 
-
-
 public class Main{
 
+    /*
+     * Args:
+     * arg[0]: Index/Search
+     * arg[1]: LSM function (optional)
+     * arg[2]: lambda (optional)
+     */
     public static void main(String[] args) {
         if (Integer.parseInt(args[0]) == 1){
             System.out.println("Hello I am index");

@@ -10,31 +10,7 @@ public class Constants {
     public static final String FR_LOC = "data//fr94";
     public static final String INDEX_LOC = "index";
     public static final String RESULTS_LOC = "results//results.txt";
-
-    /*
-     *  All doc tags
-     */ 
-
-    public static final String DOC_OPEN = "<DOC>";
-    public static final String DOC_CLOSE = "</DOC>";
-    public static final String DOC_NO_OPEN = "<DOCNO>";
-    public static final String DOC_NO_CLOSE = "</DOCNO>";
-    public static final String TEXT_OPEN = "<TEXT>";
-    public static final String TEXT_CLOSE = "</TEXT>";
-    public static final String BYLINE_OPEN = "<BYLINE>";
-    public static final String BYLINE_CLOSE = "</BYLINE>";
-    public static final String DATE_OPEN = "<DATE>";
-    public static final String DATE_CLOSE = "</DATE>";
-    public static final String HEADLINE_OPEN = "<HEADLINE>";
-    public static final String HEADLINE_CLOSE = "</HEADLINE>";
-
-    /*
-     * FBIS tags
-     */
-    public static final String FBIS_DATE_OPEN = "<DATE1>";
-    public static final String FBIS_DATE_CLOSE = "</DATE1>";
-    public static final String FBIS_HEADLINE_OPEN = "<H3>";
-    public static final String FBIS_HEADLINE_CLOSE = "</TI></H3>";
+    public static final String DEFAULT_LOGS_FOLDER = "logs";
 
     /*
      *  Query tags
@@ -46,6 +22,13 @@ public class Constants {
     public static final String DESC_TAG = "<desc>";
     public static final String NARR_TAG = "<narr>";
     public static final String CLOSE_TOP_TAG = "</top>";
+
+    public static enum Corpora {
+        LAT,
+        FBIS,
+        FTL,
+        FR
+    }
 
     public static enum QueryTag {
         None,
@@ -59,10 +42,17 @@ public class Constants {
 
     public static enum DocTag {
         None,
-        ID,
+        DOCNO,
         DATE,
         HEADLINE,
-        BYLINE,
+        AUTHOR,
         TEXT
     }
+
+    public static enum SimilarityClasses {
+		BM25,
+        VSM,
+		Dirichlet,
+		LMJelinekMercer
+	}
 }

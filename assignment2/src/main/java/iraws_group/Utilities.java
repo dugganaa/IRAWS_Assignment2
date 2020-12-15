@@ -28,29 +28,31 @@ import java.util.HashMap;
 public class Utilities{
 		
 	// Configure Ranking Function 
-	private static final SimilarityClasses SELECTED_SIMILARITY_CLASS = SimilarityClasses.Dirichlet;
-	
-	public static enum SimilarityClasses {
-		BM25,
-        VSM,
-        Dirichlet
+	private static final Constants.SimilarityClasses DEFAULT_SELECTED_SIMILARITY_CLASS = Constants.SimilarityClasses.Dirichlet;
+	private static final float DEFAULT_LAMBDA = 0.1f;
+
+	public static IndexSearcher GetSearcher(String indexPath) {
+		return GetSearcher(indexPath, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
 	}
 	
-	public static IndexSearcher GetSearcher(String indexPath)
+	public static IndexSearcher GetSearcher(String indexPath, Constants.SimilarityClasses similarityClass, float lambda)
 	{
 		try 
 		{
+			System.out.println("Ranking Function: " + similarityClass.toString());
 			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-			System.out.println("Ranking Function: " + SELECTED_SIMILARITY_CLASS);
-			switch(SELECTED_SIMILARITY_CLASS)
+			switch(similarityClass)
 			{
 				case BM25:
 					searcher.setSimilarity(new BM25Similarity());
                     break;
                 case VSM:
                     searcher.setSimilarity(new ClassicSimilarity());
-                    break;
+					break;
+				case LMJelinekMercer:
+					searcher.setSimilarity(new LMJelinekMercerSimilarity(lambda));
+					break;
                 case Dirichlet:
                 default:
                     searcher.setSimilarity(new LMDirichletSimilarity());	
@@ -59,12 +61,15 @@ public class Utilities{
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("Exception thrown while initializing index searcher: " + e.toString());
 			return null;
 		}
 	}
 	
-	public static IndexWriter GetIndexWriter(Analyzer analyzer)
+	public static IndexWriter GetIndexWriter(Analyzer analyzer) {
+		return GetIndexWriter(analyzer, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
+	}
+	public static IndexWriter GetIndexWriter(Analyzer analyzer, Constants.SimilarityClasses similarityClass, float lambda)
 	{
 		try
 		{
@@ -73,15 +78,18 @@ public class Utilities{
 			
 			//Creates a new index each time to test different analyzers/tokenizers/ranking functions
 			iwc.setOpenMode(OpenMode.CREATE);
-			System.out.println("Ranking Function: " + SELECTED_SIMILARITY_CLASS.toString());
-			switch(SELECTED_SIMILARITY_CLASS)
+			System.out.println("Ranking Function: " + similarityClass.toString());
+			switch(similarityClass)
 			{
 				case BM25:
 					iwc.setSimilarity(new BM25Similarity());
 					break;
                 case VSM:
                     iwc.setSimilarity(new ClassicSimilarity());
-                    break;
+					break;
+				case LMJelinekMercer:
+					iwc.setSimilarity(new LMJelinekMercerSimilarity(lambda));
+					break;
                 case Dirichlet:
                 default:
 					iwc.setSimilarity(new LMDirichletSimilarity());
@@ -117,5 +125,42 @@ public class Utilities{
 		parser.setAllowLeadingWildcard(true);
 		
 		return parser;
+	}
+
+	public static HashMap<String, Constants.DocTag> GetLATTags() {
+		HashMap<String, Constants.DocTag> tagMappings = new HashMap<String, Constants.DocTag>();
+		tagMappings.put("DOCNO", Constants.DocTag.DOCNO);
+		tagMappings.put("DATE", Constants.DocTag.DATE);
+		tagMappings.put("HEADLINE", Constants.DocTag.HEADLINE);
+		tagMappings.put("TEXT", Constants.DocTag.TEXT);
+		return tagMappings;
+	}
+
+	public static HashMap<String, Constants.DocTag> GetFBISTags() {
+		HashMap<String, Constants.DocTag> tagMappings = new HashMap<String, Constants.DocTag>();
+		tagMappings.put("DOCNO", Constants.DocTag.DOCNO);
+		tagMappings.put("DATE1", Constants.DocTag.DATE);
+		tagMappings.put("TI", Constants.DocTag.HEADLINE);
+		tagMappings.put("TEXT", Constants.DocTag.TEXT);
+		return tagMappings;
+	}
+
+	public static HashMap<String, Constants.DocTag> GetFTLTags() {
+		HashMap<String, Constants.DocTag> tagMappings = new HashMap<String, Constants.DocTag>();
+		tagMappings.put("DOCNO", Constants.DocTag.DOCNO);
+		tagMappings.put("DATE", Constants.DocTag.DATE);
+		tagMappings.put("HEADLINE", Constants.DocTag.HEADLINE);
+		tagMappings.put("TEXT", Constants.DocTag.TEXT);
+		tagMappings.put("BYLINE", Constants.DocTag.AUTHOR);
+		return tagMappings;
+	}
+
+	public static HashMap<String, Constants.DocTag> GetFRTags() {
+		HashMap<String, Constants.DocTag> tagMappings = new HashMap<String, Constants.DocTag>();
+		tagMappings.put("DOCNO", Constants.DocTag.DOCNO);
+		tagMappings.put("DATE", Constants.DocTag.DATE);
+		tagMappings.put("TEXT", Constants.DocTag.TEXT);
+		tagMappings.put("SIGNER", Constants.DocTag.AUTHOR);
+		return tagMappings;
 	}
 }
