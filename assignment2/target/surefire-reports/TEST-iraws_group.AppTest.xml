@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="iraws_group.AppTest" time="0.003" tests="0" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="iraws_group.AppTest" time="0.002" tests="0" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="15"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/usr/local/Cellar/openjdk/15.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter8159801698396350989.jar /Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire 2020-12-15T00-33-39_508-jvmRun1 surefire18259408399175281491tmp surefire_06322569449681065417tmp"/>
+    <property name="sun.java.command" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter1546413453995677931.jar /Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire 2020-12-15T00-40-06_730-jvmRun1 surefire1501996165857670612tmp surefire_04475291124835130936tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/test-classes:/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/classes:/Users/adamteehan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-core/8.7.0/lucene-core-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.7.0/lucene-analyzers-common-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queryparser/8.7.0/lucene-queryparser-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queries/8.7.0/lucene-queries-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-sandbox/8.7.0/lucene-sandbox-8.7.0.jar:"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter8159801698396350989.jar"/>
+    <property name="surefire.real.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter1546413453995677931.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="15.0.1+9"/>
