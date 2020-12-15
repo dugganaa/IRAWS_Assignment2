@@ -31,7 +31,7 @@ public class Search {
             
             for(ParsedTopic topic : parsedTopics) {
                 try {
-                    ScoreDoc[] hits = searcher.search(queryParser.parse(queryBuilder(topic)), 1000).scoreDocs;
+                    ScoreDoc[] hits = searcher.search(queryParser.parse(QueryParser.escape(queryBuilder(topic))), 1000).scoreDocs;
                     System.out.println("Found " + hits.length + " hits");
                     
                     for (int i = 0; i < hits.length-1; i++)
@@ -147,6 +147,14 @@ public class Search {
 
         String newStringTwo = newStringOne.concat(" ");
         newStringTwo = newStringTwo.concat(strThree);
+        System.out.println(" ");
+        System.out.println(" ");
+
+        System.out.println(newStringTwo);
+
+        System.out.println(" ");
+        System.out.println(" ");
+
 
         String[] words = newStringTwo.split(" ");
         ArrayList<String> wordsList = new ArrayList<String>();
