@@ -13,6 +13,7 @@ public class Constants {
     public static final String FR_LOC = "data//fr94";
     public static final String INDEX_LOC = "index";
     public static final String RESULTS_LOC = "results//results.txt";
+    public static final String RESULTS_FOLDER_LOC = "results";
     public static final String DEFAULT_LOGS_FOLDER = "logs";
 
     /*

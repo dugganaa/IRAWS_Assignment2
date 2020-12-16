@@ -57,15 +57,17 @@ public class Search {
 
         try
 		{
-			PrintWriter resultsWriter = new PrintWriter(new FileOutputStream(Constants.RESULTS_LOC, false));
             Analyzer analyzer = new ModifiableTokenizer();
+            String outputFile;
             IndexSearcher searcher;
             if (args.length > 1) {
                 searcher = Utilities.GetSearcher(Constants.INDEX_LOC, Constants.SimilarityClasses.values()[Integer.parseInt(args[1])], Float.parseFloat(args[2]));
-            }
-            else {
+                outputFile = Constants.RESULTS_FOLDER_LOC + "//" + args[3];
+            }else {
                 searcher = Utilities.GetSearcher(Constants.INDEX_LOC);
+                outputFile = Constants.RESULTS_LOC;
             }
+            PrintWriter resultsWriter = new PrintWriter(new FileOutputStream(outputFile, false));
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString()}, analyzer);
             
 
