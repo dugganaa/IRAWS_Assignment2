@@ -1,5 +1,7 @@
 iraws_group/Constants.class
+iraws_group/Constants$Corpora.class
 iraws_group/ModifiableTokenizer$Tokenizers.class
+iraws_group/Log$1.class
 iraws_group/Index.class
 createOnlyTitleQuery.class
 iraws_group/ModifiableTokenizer$1.class
@@ -9,11 +11,11 @@ iraws_group/ModifiableTokenizer.class
 iraws_group/Search.class
 transform.class
 iraws_group/ModifiableTokenizer$Filters.class
-iraws_group/Utilities$SimilarityClasses.class
+iraws_group/Constants$SimilarityClasses.class
 iraws_group/ParsedTopic.class
 createBothTitleAndDescQuery.class
-iraws_group/Search$1.class
 iraws_group/Main.class
 iraws_group/Utilities.class
 iraws_group/Constants$DocTag.class
 createOnlyDescQuery.class
+iraws_group/Log.class

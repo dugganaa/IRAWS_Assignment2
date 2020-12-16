@@ -3,7 +3,7 @@
   <properties>
     <property name="java.specification.version" value="15"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="java.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/test-classes:/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/classes:/Users/adamteehan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-core/8.7.0/lucene-core-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.7.0/lucene-analyzers-common-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queryparser/8.7.0/lucene-queryparser-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queries/8.7.0/lucene-queries-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-sandbox/8.7.0/lucene-sandbox-8.7.0.jar:"/>
+    <property name="java.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/test-classes:/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/classes:/Users/adamteehan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-core/8.7.0/lucene-core-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.7.0/lucene-analyzers-common-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queryparser/8.7.0/lucene-queryparser-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queries/8.7.0/lucene-queries-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-sandbox/8.7.0/lucene-sandbox-8.7.0.jar:/Users/adamteehan/.m2/repository/org/jsoup/jsoup/1.11.3/jsoup-1.11.3.jar:"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="https://openjdk.java.net/"/>
@@ -12,10 +12,10 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/usr/local/Cellar/openjdk/15.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter3760861855414109417.jar /Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire 2020-12-15T14-49-41_456-jvmRun1 surefire4769577856242666516tmp surefire_010584948479471510527tmp"/>
+    <property name="sun.java.command" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter6842884261834033615.jar /Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire 2020-12-16T01-05-33_077-jvmRun1 surefire14773919214926837864tmp surefire_0966842678117327226tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/test-classes:/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/classes:/Users/adamteehan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-core/8.7.0/lucene-core-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.7.0/lucene-analyzers-common-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queryparser/8.7.0/lucene-queryparser-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queries/8.7.0/lucene-queries-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-sandbox/8.7.0/lucene-sandbox-8.7.0.jar:"/>
+    <property name="surefire.test.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/test-classes:/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/classes:/Users/adamteehan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-core/8.7.0/lucene-core-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-analyzers-common/8.7.0/lucene-analyzers-common-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queryparser/8.7.0/lucene-queryparser-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-queries/8.7.0/lucene-queries-8.7.0.jar:/Users/adamteehan/.m2/repository/org/apache/lucene/lucene-sandbox/8.7.0/lucene-sandbox-8.7.0.jar:/Users/adamteehan/.m2/repository/org/jsoup/jsoup/1.11.3/jsoup-1.11.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="/Users/adamteehan"/>
     <property name="user.language" value="en"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter3760861855414109417.jar"/>
+    <property name="surefire.real.class.path" value="/Users/adamteehan/Desktop/IRAWS_Assignment2/assignment2/target/surefire/surefirebooter6842884261834033615.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="15.0.1+9"/>
