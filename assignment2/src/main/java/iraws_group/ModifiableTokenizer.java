@@ -13,6 +13,8 @@ import org.apache.lucene.analysis.miscellaneous.LengthFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.LowerCaseFilter;
+
 
 import java.util.Arrays;
 
@@ -43,7 +45,8 @@ public class ModifiableTokenizer extends Analyzer{
 		Classic,
 		Stop,
 		Length,
-		Stem
+		Stem,
+		Case
 	}
 	
 	@Override
@@ -65,6 +68,9 @@ public class ModifiableTokenizer extends Analyzer{
 			{
 			case Classic:
 				stream = new ClassicFilter(stream);
+				break;
+			case Case:
+				stream = new LowerCaseFilter(stream);
 				break;
 			case Stop:
 				CharArraySet stopWords = new CharArraySet(Constants.STOPS.length, true);

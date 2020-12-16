@@ -68,7 +68,10 @@ public class Search {
             }
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString()}, analyzer);
             
+
+            int COUNT = 0;
             for(ParsedTopic topic : parsedTopics) {
+                COUNT+=1;
                 try {
                     // String title = topic.getTitle();
                     // System.out.println(title);
@@ -107,6 +110,7 @@ public class Search {
                     e.printStackTrace();
                 }
             }
+            System.out.println(COUNT);
 			resultsWriter.close();
 			System.out.println("Finished.");
 		}
