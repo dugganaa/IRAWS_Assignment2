@@ -1,0 +1,7 @@
+assignment2/data/
+!assignment2/data/topics.txt
+*.class
+*.jar
+.DS_Store
+dependency-reduced-pom.xml
+logs/
