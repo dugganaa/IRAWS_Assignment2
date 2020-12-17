@@ -23,7 +23,9 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Utilities{
 		
@@ -162,5 +164,11 @@ public class Utilities{
 		tagMappings.put("TEXT", Constants.DocTag.TEXT);
 		tagMappings.put("SIGNER", Constants.DocTag.AUTHOR);
 		return tagMappings;
+	}
+
+	public static HashSet<String> GetNarrStopWords() {
+		HashSet<String> stopWords = new HashSet<String>();
+		Collections.addAll(stopWords, "relevant", "document", "documents", "reference", "references", "include", "identify");
+		return stopWords;
 	}
 }
