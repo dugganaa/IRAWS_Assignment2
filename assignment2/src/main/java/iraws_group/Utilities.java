@@ -57,7 +57,7 @@ public class Utilities{
 					break;
                 case Dirichlet:
                 default:
-                    searcher.setSimilarity(new LMDirichletSimilarity());	
+                    searcher.setSimilarity(new LMDirichletSimilarity(lambda));	
 			}			
 			return searcher;
 		}
@@ -94,7 +94,7 @@ public class Utilities{
 					break;
                 case Dirichlet:
                 default:
-					iwc.setSimilarity(new LMDirichletSimilarity());
+					iwc.setSimilarity(new LMDirichletSimilarity(lambda));
 			}			
 	        IndexWriter writer = new IndexWriter(dir, iwc);
 	        return writer;
