@@ -1,11 +1,15 @@
 package iraws_group;
+
+/**
+ * An object for each topic in topics.txt to be parsed into.
+ */
 public class ParsedTopic {
     private String num;
     private String title;
     private String desc;
     private String narr;
-    public ParsedTopic() {
 
+    public ParsedTopic() {
     }
 
     public void setNum(String num) {

@@ -61,5 +61,20 @@ public class Constants {
         VSM,
 		Dirichlet,
 		LMJelinekMercer
+    }
+    
+    public static enum Tokenizers {
+		Standard,
+		Whitespace,
+		Letter,
+		Classic
+	}
+	
+	public static enum Filters {
+		Classic,
+		Stop,
+		Length,
+		Stem,
+		Case
 	}
 }

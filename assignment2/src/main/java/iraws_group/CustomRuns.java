@@ -9,7 +9,7 @@ package iraws_group;
  * To test different weighting values, a new index must be created each iteration. This can take quite a while,
  * especially when other code adjustments/improvements are to be done. CustomRuns.java runs iterations of JM and DIR,
  * queries these indexes and creates a results file, so can be run on the AWS instance in the background while changes continue
- * to be made 
+ * to be made locally.
  */
 public class CustomRuns {
     private static final float LAMBDA_START = 0.05f;
@@ -23,9 +23,9 @@ public class CustomRuns {
 
         //JM
         for (float lambda = LAMBDA_INCREMENTS; lambda <= 1.0f; lambda += LAMBDA_INCREMENTS) {
-            //System.out.println("Running JM with lambda: " + Float.toString(lambda));
-            //Index.main(new String[]{ "1", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda)});
-            //Search.main(new String[]{ "2", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda), "jm-" + Float.toString(lambda) + ".txt"});
+            System.out.println("Running JM with lambda: " + Float.toString(lambda));
+            Index.main(new String[]{ "1", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda)});
+            Search.main(new String[]{ "2", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda), "jm-" + Float.toString(lambda) + ".txt"});
         }
 
         //Dirichlet

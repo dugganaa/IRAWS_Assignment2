@@ -15,6 +15,11 @@ import java.text.SimpleDateFormat;
 
 import jdk.jfr.internal.LogLevel;
 
+/**
+ * A logging class that can output info and warning messages.
+ * Useful to stream large number of messages to a file rather than the cmd.
+ */
+
 public class Log {
     private Logger logger;
     private Handler outputHandler;

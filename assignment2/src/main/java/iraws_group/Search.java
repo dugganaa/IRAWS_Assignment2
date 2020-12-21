@@ -54,13 +54,19 @@ import org.apache.lucene.search.ScoreDoc;
 public class Search {
     public static void main(String[] args)
     {
+        //A list of parsed topics found in topics.txt
         List<ParsedTopic> parsedTopics = ParseTopics();
 
         try
 		{
+            //Creates the custom analyzer which will be used by the IndexSearcher
             Analyzer analyzer = new ModifiableTokenizer();
+
             String outputFile;
             IndexSearcher searcher;
+
+            //In general, there will only be one cl arg specifiying whether the code should index or search. 
+            //Passing more arguments manually specifies the ranking function, weighting value and output file where appropriate.
             if (args.length > 1) {
                 searcher = Utilities.GetSearcher(Constants.INDEX_LOC, Constants.SimilarityClasses.values()[Integer.parseInt(args[1])], Float.parseFloat(args[2]));
                 outputFile = Constants.RESULTS_FOLDER_LOC + "//" + args[3];
@@ -68,72 +74,43 @@ public class Search {
                 searcher = Utilities.GetSearcher(Constants.INDEX_LOC);
                 outputFile = Constants.RESULTS_LOC;
             }
+
             PrintWriter resultsWriter = new PrintWriter(new FileOutputStream(outputFile, false));
+            //MFQP applies the query to the specified fields of each document
             MultiFieldQueryParser queryParser = new MultiFieldQueryParser(new String[] {Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString()}, analyzer);
             
-
-            int COUNT = 0;
+            //For each parsed topic, generate a list of max 1000 relevant documents.
             for(ParsedTopic topic : parsedTopics) {
-                COUNT+=1;
                 try {
-                    // String title = topic.getTitle();
-                    // System.out.println(title);
-
-                    // // title = title.replaceAll(" ", "");
-                    // String[] brokenTitle = title.split(",");
-                    // String titleMustHave ="(";
-                    // int count = 0;
-                    // for(int m = 0; m<brokenTitle.length;m++)
-                    // {
-                    //     System.out.println(brokenTitle.length);
-                    //     if(count == brokenTitle.length-1)
-                    //     {
-                    //         titleMustHave += brokenTitle[m];
-                    //         titleMustHave += ")";
-                    //         break;
-                    //     }
-                    //     titleMustHave += brokenTitle[m];
-                    //     titleMustHave += " AND";
-                    //     count+=1;
-                    // }
-                    // System.out.println(titleMustHave);
+                    //Generates a string query from the topic
                     String query = queryBuilder(topic);
-                    // query += titleMustHave;
+
+                    //Searches index and creates a list of relevant documents
                     ScoreDoc[] hits = searcher.search(queryParser.parse(QueryParser.escape(query)), 1000).scoreDocs;
                     System.out.println("Found " + hits.length + " hits");
                     
-                    for (int i = 0; i < hits.length-1; i++)
-                    {
+                    //Outputs the results in trec_eval format
+                    for (int i = 0; i < hits.length-1; i++){
                         Document hitDoc = searcher.doc(hits[i].doc);
                         resultsWriter.println(topic.getNum() + " 0 " + hitDoc.get("DOCNO") + " " + i + " " + hits[i].score + " 0");
                     }
                 }
-                catch(Exception e)
-                {
+                catch(Exception e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println(COUNT);
 			resultsWriter.close();
 			System.out.println("Finished.");
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			e.printStackTrace();
 		}
     }
     
-    // private static Constants.QueryTag getTag(String currLine) {
-    //    if (currLine.indexOf(Constants.OPEN_TOP_TAG) == 0) return Constants.QueryTag.Open;
-    //    if (currLine.indexOf(Constants.NUM_TAG) == 0) return Constants.QueryTag.Num;
-    //    if (currLine.indexOf(Constants.TITLE_TAG) == 0) return Constants.QueryTag.Title;
-    //    if (currLine.indexOf(Constants.DESC_TAG) == 0) return Constants.QueryTag.Desc;
-    //    if (currLine.indexOf(Constants.NARR_TAG) == 0) return Constants.QueryTag.Narr;
-    //    if (currLine.indexOf(Constants.CLOSE_TOP_TAG) == 0) return Constants.QueryTag.Close;
-    //    return Constants.QueryTag.None;
-    // }
-
-    
+    /**
+     * Function that parses topics from topics.txt
+     * @return List of parsed topics
+     */
     private static List<ParsedTopic> ParseTopics() {
 
         ArrayList<ParsedTopic> parsedTopics = new ArrayList<ParsedTopic>();
@@ -145,13 +122,9 @@ public class Search {
             FileReader fileReader = new FileReader(topicsFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line = bufferedReader.readLine();
-            int runCounter = 0;
             while (line != null) 
             {
-                System.out.println(runCounter);
-                System.out.println(line);
                 parsedTopic = new ParsedTopic();
-                // line = bufferedReader.readLine();
                 while (!line.contains("<num>")) {
                     line = bufferedReader.readLine();
                     if(line == null){
@@ -161,18 +134,21 @@ public class Search {
                 if(line == null){
                     break;
                 }
+                //Add topic number to parsedTopic
                 if(line.contains("<num>"))
                 {
                     String words2store = "";
                     words2store += line;
+                    //Num is a numerical value, all non-numerical characters can be removed from the line
                     words2store = words2store.replaceAll("[^0-9]", "");
                     line = bufferedReader.readLine();
                     parsedTopic.setNum(words2store);
-                    // System.out.println(words2store);
                 }
+                //Ignores whitespace between "num" and "topic"
                 while (!line.contains("<title>")) {
                     line = bufferedReader.readLine();
                 }
+                //Adds titled to parsedTopic
                 if(line.contains("<title>"))
                 {
                     String words2store = "";
@@ -180,11 +156,12 @@ public class Search {
                     words2store = words2store.replaceAll("<title> ", "");
                     line = bufferedReader.readLine();
                     parsedTopic.setTitle(words2store);
-                    // System.out.println(words2store);
                 }
+                //Ignores whitespace between "title" and "desc"
                 while (!line.contains("<desc>")) {
                     line = bufferedReader.readLine();
                 }
+                //Iterates through all the description of a topic and stores it in parsedTopic
                 if(line.contains("<desc>"))
                 {
                     String words2store = "";
@@ -197,11 +174,12 @@ public class Search {
                         line = bufferedReader.readLine();
                     }
                     parsedTopic.setDesc(words2store);
-                    // System.out.println(words2store);
                 }
+                //Ignores whitespace between "desc" and "narr"
                 while (!line.contains("<narr>")) {
                     line = bufferedReader.readLine();
                 }
+                //Iterates through all the narrative of a topic and stores it in parsedTopic
                 if(line.contains("<narr>"))
                 {
                     String words2store = "";
@@ -210,188 +188,61 @@ public class Search {
                     {
                         words2store += line;
                         words2store += " ";
-                        // words2store = words2store.replaceAll("<title> ", "");
                         line = bufferedReader.readLine();
                     }
                     parsedTopic.setNarr(words2store);
-                    //System.out.println(words2store);
                 }
                 parsedTopics.add(parsedTopic);
-                runCounter+=1;
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             e.printStackTrace();
         }
         return parsedTopics;
     }
     
-    
-    
-    
-    // private static List<ParsedTopic> ParseTopics() {
-
-    //     ArrayList<ParsedTopic> parsedTopics = new ArrayList<ParsedTopic>();
-
-    //     try {
-    //         File topicsFile = new File(Constants.REL_TOPICS_LOC);
-    //         Scanner topicsReader = new Scanner(topicsFile);
-    //         String currLine = "";
-    //         String currFieldEntry = "";
-    //         ParsedTopic parsedTopic = new ParsedTopic();
-    //         Constants.QueryTag currTag = Constants.QueryTag.None;
-
-    //         while (topicsReader.hasNextLine()) {
-    //             currLine = topicsReader.nextLine();
-
-    //             if (currLine.isEmpty())
-    //                 continue;
-
-    //             Constants.QueryTag tagOnCurrLine = getTag(currLine);
-    //             switch(tagOnCurrLine) {
-    //                 case Open: 
-    //                     if (currTag != Constants.QueryTag.None) parsedTopics.add(parsedTopic);
-    //                     parsedTopic = new ParsedTopic();
-    //                     currTag = Constants.QueryTag.Open;
-    //                     break;
-
-    //                 case Num: 
-    //                     parsedTopic.setNum(currLine.split(" ")[2].trim());
-    //                     System.out.println("Adding Num: " + currLine.split(" ")[2].trim() );
-    //                     currTag = Constants.QueryTag.Num;
-    //                     break;
-
-    //                 case Title: 
-    //                     parsedTopic.setTitle(currLine.substring(Constants.TITLE_TAG.length()).trim());
-    //                     System.out.println("Adding Title: " + currLine.substring(Constants.TITLE_TAG.length()).trim());
-    //                     currTag = Constants.QueryTag.Title;
-    //                     break;
-
-    //                 case Desc: 
-    //                     currFieldEntry = "";
-    //                     currTag = Constants.QueryTag.Desc;
-    //                     break;
-
-    //                 case Narr: 
-    //                     System.out.println("Adding desc: " + currFieldEntry);
-    //                     parsedTopic.setDesc(currFieldEntry);
-    //                     currFieldEntry = "";
-    //                     currTag = Constants.QueryTag.Narr;
-    //                     break;
-
-    //                 case Close: 
-    //                     System.out.println("Adding Narr: " + currFieldEntry);
-    //                     parsedTopic.setNarr(currFieldEntry);
-    //                     currFieldEntry = "";
-    //                     currTag = Constants.QueryTag.Close;
-    //                     break;
-
-    //                 case None: 
-    //                     currFieldEntry += currLine.trim();
-    //                     break;
-
-    //                 default:
-    //                     break;
-    //             }
-    //         }
-    //         System.out.println("Parsed " + parsedTopics.size() + " topics.");
-    //     }catch(Exception e)
-    //     {
-    //         e.printStackTrace();
-    //     }
-    //     return parsedTopics;
-    // }
-
-
-
+    /**
+     * @param topic A parsed topic from the topics file.
+     * @return      A string query generated from the parsed topic
+     */
     private static String queryBuilder(ParsedTopic topic){
-        String strOne = topic.getTitle();
-        String strTwo = topic.getDesc();
-        String strThree = getNarrRel(topic.getNarr());
 
-        String newStringOne = strOne.concat(" "); 
-        newStringOne = newStringOne.concat(strTwo);
+        //Creates a basic query string from the query title, description and relative words in the narrative.
+        String queryString = topic.getTitle() + " " + topic.getDesc() + " " + getNarrRel(topic.getNarr());
 
-        String newStringTwo = newStringOne.concat(" ");
-        newStringTwo = newStringTwo.concat(strThree);
-        // System.out.println(" ");
-        // System.out.println(" ");
-
-        // // System.out.println(newStringTwo);
-
-        // System.out.println(" ");
-        // System.out.println(" ");
-
-
-        String[] words = newStringTwo.split(" ");
-        String[] irrelevantWords = getNarrNotRel(topic.getNarr()).split(" ");
-        ArrayList<String> wordsList = new ArrayList<String>();
-        ArrayList<String> irrelevantWordsList = new ArrayList<String>();
-        Set<String> stopWordsSet = new HashSet<String>();
-        for (int l = 0; l<Constants.STOPS.length;l++){
-            stopWordsSet.add(Constants.STOPS[l]);
-        }
-
-        for(String word : words)
-        {
-            String wordCompare = word.toLowerCase();
-            if(!stopWordsSet.contains(wordCompare))
-            {
-                wordsList.add(word);
-            }
-        }
-
-        System.out.println("Irrelevant words: " + irrelevantWords.length);
-        for (String word : irrelevantWords) {
-            if (!stopWordsSet.contains(word.toLowerCase())) {
-                irrelevantWordsList.add(word);
-            }
-        }
-        
-        String irrelevantWordsString = "NOT \""+ String.join(" ", irrelevantWordsList) + "\"";
-        String finalString="";
-        for (String str : wordsList){
-            finalString = finalString.concat(" ");
-            finalString = finalString.concat(str);
-        }
-        //finalString += " " + irrelevantWordsString;
-        //test change
-        //System.out.println(finalString);
-        System.out.println("finalString: " + finalString);
-        return finalString;
+        return queryString;
     }
 
-        
-
-    private static String getNarrNotRel(String narr) {
-
-        if (narr.isEmpty()) return "";
-
-        String[] sentences = narr.split("\\.");
-        ArrayList<String> nonRelevantSentences = new ArrayList<String>();
-        for (String sentence : sentences) {
-            if (sentence.contains("not relevant")) {
-                nonRelevantSentences.add(sentence);
-            }
-        }
-        nonRelevantSentences = removeNarrStopwords(nonRelevantSentences);
-        return String.join(" ", nonRelevantSentences);
-    }
+    /**
+     * The narrative section of a document contains both "relevant" and "non-relevant" sections.
+     * This function provides a basic approach to understanding what's "relevant".
+     * @param narr  Narr section of a document
+     * @return      String of relevant terms
+     */
     private static String getNarrRel(String narr) {
         if (narr.isEmpty()) return "";
 
+        //Sentences are split by a period.
         String[] sentences = narr.split("\\.");
         ArrayList<String> relevantSentences = new ArrayList<String>();
+        //Whenever something is expressed as irrelevant in the Narr section, the sentence typically contains the expression "not relevant"
         for (String sentence : sentences) {
             if (!sentence.contains("not relevant")) {
                 relevantSentences.add(sentence);
             }
         }
+
+        //Removes stopwords specific to the narrative section
         relevantSentences = removeNarrStopwords(relevantSentences);
         return String.join(" ", relevantSentences);
     }
 
+    /**
+     * Some words frequently occur in the narrative section that can be remove.
+     * eg. "relevant", "cites", "document"
+     * @param sentences     The list of sentences in the narrative section
+     * @return              The sentences passed as arg with stop words removed
+     */
     private static ArrayList<String> removeNarrStopwords(ArrayList<String> sentences)  {
         Set<String> stopWords = Utilities.GetNarrStopWords();
 

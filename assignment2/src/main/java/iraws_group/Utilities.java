@@ -27,23 +27,44 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * A class for shared functions and object initializers with shared values
+ */
+
 public class Utilities{
 		
 	// Configure Ranking Function 
 	private static final Constants.SimilarityClasses DEFAULT_SELECTED_SIMILARITY_CLASS = Constants.SimilarityClasses.Dirichlet;
+	
+	//JM cannot be initialized without a lambda value. Initalized with DEFAULT_LAMBDA if none specified as a cl arg.
 	private static final float DEFAULT_LAMBDA = 0.1f;
 
+	//Default mu value for DIR if none specified as a cl arg.
+	private static final float DEFAULT_MU = 700f;
+
+	/**
+	 * Initializes an IndexSearcher object pointing at the created index with preset ranking function and lambda value.
+	 * @param indexPath	String path to the index.
+	 * @return			IndexSearcher object. 
+	 */
 	public static IndexSearcher GetSearcher(String indexPath) {
-		return GetSearcher(indexPath, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
+		return GetSearcher(indexPath, DEFAULT_SELECTED_SIMILARITY_CLASS, GetDefaultWeightingValue());
 	}
 	
+	/**
+	 * Initializes an IndexSearcher object pointing at the created index and user specified ranking function and weighting value.
+	 * @return						IndexSearcher object.
+	 */
 	public static IndexSearcher GetSearcher(String indexPath, Constants.SimilarityClasses similarityClass, float smoothingWeighting)
 	{
 		try 
 		{
-			System.out.println("Ranking Function: " + similarityClass.toString());
 			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
+			System.out.println("Ranking Function: " + similarityClass.toString());
+			System.out.println("Weighting value: " + smoothingWeighting);
+
+			//Sets the ranking function for the Index Searcher - default is Dirichlet.
 			switch(similarityClass)
 			{
 				case BM25:
@@ -69,9 +90,22 @@ public class Utilities{
 		}
 	}
 	
+	/**
+	 * Initializes an IndexWriter object with preset ranking function and lambda value.
+	 * @param analyzer	The analyzer which that the documents will be passed through before being written to the index.
+	 * @return			An IndexWriter object.
+	 */
 	public static IndexWriter GetIndexWriter(Analyzer analyzer) {
-		return GetIndexWriter(analyzer, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
+		return GetIndexWriter(analyzer, DEFAULT_SELECTED_SIMILARITY_CLASS, GetDefaultWeightingValue());
 	}
+
+	/**
+	 * Initializes an IndexWriter object with user specificed ranking function and weighting value.
+	 * @param analyzer				The analyzer which that the documents will be passed through before being written to the index.
+	 * @param similarityClass		Ranking function specified via cl arg.
+	 * @param smoothingWeighting	Weighting value specified via cl arg.
+	 * @return						An IndexWriter object.
+	 */
 	public static IndexWriter GetIndexWriter(Analyzer analyzer, Constants.SimilarityClasses similarityClass, float smoothingWeighting)
 	{
 		try
@@ -82,6 +116,8 @@ public class Utilities{
 			//Creates a new index each time to test different analyzers/tokenizers/ranking functions
 			iwc.setOpenMode(OpenMode.CREATE);
 			System.out.println("Ranking Function: " + similarityClass.toString());
+			System.out.println("Weighting value: " + smoothingWeighting);
+			//Sets the ranking function for the Index Writer - default is Dirichlet.
 			switch(similarityClass)
 			{
 				case BM25:
@@ -106,31 +142,18 @@ public class Utilities{
 			e.printStackTrace();
 			return null;
 		}
-    }
-    
-     /*
-     * Currently returns 0 hits :( 
-     */
-	public static BooleanQuery GetQuery(Analyzer analyzer, ParsedTopic topic)
-	{
-        BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
-        Query query1 = new TermQuery(new Term(Constants.DocTag.HEADLINE.toString(), topic.getTitle()));
-        Query query2 = new TermQuery(new Term(Constants.DocTag.TEXT.toString(), topic.getDesc()));
-        booleanQuery.add(query1, BooleanClause.Occur.SHOULD);
-        booleanQuery.add(query2, BooleanClause.Occur.SHOULD);
-		return booleanQuery.build();
-    }
-    
-    public static MultiFieldQueryParser GetQueryParser(Analyzer analyzer)
-	{
-		// MultiFieldQueryParser allows for a query to search all the fields of a document
-		String[] fieldsToAnalyze = { Constants.DocTag.HEADLINE.toString(), Constants.DocTag.TEXT.toString() };
-		MultiFieldQueryParser parser = new MultiFieldQueryParser(fieldsToAnalyze, analyzer);
-		parser.setAllowLeadingWildcard(true);
-		
-		return parser;
 	}
-
+	
+	private static float GetDefaultWeightingValue() {
+		if (DEFAULT_SELECTED_SIMILARITY_CLASS == Constants.SimilarityClasses.Dirichlet) return DEFAULT_MU;
+		if (DEFAULT_SELECTED_SIMILARITY_CLASS == Constants.SimilarityClasses.LMJelinekMercer) return DEFAULT_LAMBDA;
+		return 0f;
+	}
+	
+	/**
+	 * Below are the tag mappings for each corpus, as tags in each corpus do not always follow the same convention 
+	 * Eg. DATE in LAT corpus, DATE1 in FBIS corpus.
+	 */
 	public static HashMap<String, Constants.DocTag> GetLATTags() {
 		HashMap<String, Constants.DocTag> tagMappings = new HashMap<String, Constants.DocTag>();
 		tagMappings.put("DOCNO", Constants.DocTag.DOCNO);
@@ -168,6 +191,9 @@ public class Utilities{
 		return tagMappings;
 	}
 
+	/**
+	 * @return HashSet of narrative specific stop words.
+	 */
 	public static HashSet<String> GetNarrStopWords() {
 		HashSet<String> stopWords = new HashSet<String>();
 		Collections.addAll(stopWords, "relevant", "document", "documents", "reference", "references", "include", "identify");

@@ -23,9 +23,13 @@ public class Main{
      * arg[0]: Index/Search
      * arg[1]: LSM function (optional)
      * arg[2]: lambda (optional)
+     * arg[3]: Custom results file name (optional)
      */
     public static void main(String[] args) {
-        if (Integer.parseInt(args[0]) == 1){
+        if (args.length < 1 || (Integer.parseInt(args[0]) != 1 && Integer.parseInt(args[0]) != 2)) {
+            System.out.println("Please specifiy index (1) or search (2)");
+        }
+        else if (Integer.parseInt(args[0]) == 1){
             System.out.println("Hello I am index");
             Index.main(args);
         } else if (Integer.parseInt(args[0]) == 2){
