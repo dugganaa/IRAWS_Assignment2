@@ -23,9 +23,9 @@ public class CustomRuns {
 
         //JM
         for (float lambda = LAMBDA_INCREMENTS; lambda <= 1.0f; lambda += LAMBDA_INCREMENTS) {
-            System.out.println("Running JM with lambda: " + Float.toString(lambda));
-            Index.main(new String[]{ "1", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda)});
-            Search.main(new String[]{ "2", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda), "jm-" + Float.toString(lambda) + ".txt"});
+            //System.out.println("Running JM with lambda: " + Float.toString(lambda));
+            //Index.main(new String[]{ "1", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda)});
+            //Search.main(new String[]{ "2", Integer.toString(Constants.SimilarityClasses.LMJelinekMercer.ordinal()), Float.toString(lambda), "jm-" + Float.toString(lambda) + ".txt"});
         }
 
         //Dirichlet
