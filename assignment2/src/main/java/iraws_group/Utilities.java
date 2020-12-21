@@ -23,7 +23,9 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.BooleanQuery.Builder;
 
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Utilities{
 		
@@ -55,7 +57,7 @@ public class Utilities{
 					break;
                 case Dirichlet:
                 default:
-                    searcher.setSimilarity(new LMDirichletSimilarity());	
+                    searcher.setSimilarity(new LMDirichletSimilarity(lambda));	
 			}			
 			return searcher;
 		}
@@ -92,7 +94,7 @@ public class Utilities{
 					break;
                 case Dirichlet:
                 default:
-					iwc.setSimilarity(new LMDirichletSimilarity());
+					iwc.setSimilarity(new LMDirichletSimilarity(lambda));
 			}			
 	        IndexWriter writer = new IndexWriter(dir, iwc);
 	        return writer;
@@ -162,5 +164,11 @@ public class Utilities{
 		tagMappings.put("TEXT", Constants.DocTag.TEXT);
 		tagMappings.put("SIGNER", Constants.DocTag.AUTHOR);
 		return tagMappings;
+	}
+
+	public static HashSet<String> GetNarrStopWords() {
+		HashSet<String> stopWords = new HashSet<String>();
+		Collections.addAll(stopWords, "relevant", "document", "documents", "reference", "references", "include", "identify");
+		return stopWords;
 	}
 }

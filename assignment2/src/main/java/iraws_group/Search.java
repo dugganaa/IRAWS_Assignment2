@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.HashSet;
 
 import iraws_group.Constants;
 
@@ -213,7 +214,7 @@ public class Search {
                         line = bufferedReader.readLine();
                     }
                     parsedTopic.setNarr(words2store);
-                    System.out.println(words2store);
+                    //System.out.println(words2store);
                 }
                 parsedTopics.add(parsedTopic);
                 runCounter+=1;
@@ -307,7 +308,7 @@ public class Search {
     private static String queryBuilder(ParsedTopic topic){
         String strOne = topic.getTitle();
         String strTwo = topic.getDesc();
-        String strThree = topic.getNarr();
+        String strThree = getNarrRel(topic.getNarr());
 
         String newStringOne = strOne.concat(" "); 
         newStringOne = newStringOne.concat(strTwo);
@@ -324,7 +325,9 @@ public class Search {
 
 
         String[] words = newStringTwo.split(" ");
+        String[] irrelevantWords = getNarrNotRel(topic.getNarr()).split(" ");
         ArrayList<String> wordsList = new ArrayList<String>();
+        ArrayList<String> irrelevantWordsList = new ArrayList<String>();
         Set<String> stopWordsSet = new HashSet<String>();
         for (int l = 0; l<Constants.STOPS.length;l++){
             stopWordsSet.add(Constants.STOPS[l]);
@@ -332,19 +335,76 @@ public class Search {
 
         for(String word : words)
         {
-            String wordCompare = word.toUpperCase();
+            String wordCompare = word.toLowerCase();
             if(!stopWordsSet.contains(wordCompare))
             {
                 wordsList.add(word);
             }
         }
+
+        System.out.println("Irrelevant words: " + irrelevantWords.length);
+        for (String word : irrelevantWords) {
+            if (!stopWordsSet.contains(word.toLowerCase())) {
+                irrelevantWordsList.add(word);
+            }
+        }
+        
+        String irrelevantWordsString = "NOT \""+ String.join(" ", irrelevantWordsList) + "\"";
         String finalString="";
         for (String str : wordsList){
             finalString = finalString.concat(" ");
             finalString = finalString.concat(str);
         }
+        //finalString += " " + irrelevantWordsString;
         //test change
         //System.out.println(finalString);
+        System.out.println("finalString: " + finalString);
         return finalString;
+    }
+
+        
+
+    private static String getNarrNotRel(String narr) {
+
+        if (narr.isEmpty()) return "";
+
+        String[] sentences = narr.split("\\.");
+        ArrayList<String> nonRelevantSentences = new ArrayList<String>();
+        for (String sentence : sentences) {
+            if (sentence.contains("not relevant")) {
+                nonRelevantSentences.add(sentence);
+            }
+        }
+        nonRelevantSentences = removeNarrStopwords(nonRelevantSentences);
+        return String.join(" ", nonRelevantSentences);
+    }
+    private static String getNarrRel(String narr) {
+        if (narr.isEmpty()) return "";
+
+        String[] sentences = narr.split("\\.");
+        ArrayList<String> relevantSentences = new ArrayList<String>();
+        for (String sentence : sentences) {
+            if (!sentence.contains("not relevant")) {
+                relevantSentences.add(sentence);
+            }
+        }
+        relevantSentences = removeNarrStopwords(relevantSentences);
+        return String.join(" ", relevantSentences);
+    }
+
+    private static ArrayList<String> removeNarrStopwords(ArrayList<String> sentences)  {
+        Set<String> stopWords = Utilities.GetNarrStopWords();
+
+        for (int i = 0; i < sentences.size(); i++) {
+            String[] wordsInSentence = sentences.get(i).split(" ");
+            String newSentence = "";
+            for (String word : wordsInSentence) {
+                if (!stopWords.contains(word.toLowerCase())){
+                    newSentence += " " + word;
+                }
+            }
+            sentences.set(i, newSentence);
+        }
+        return sentences;
     }
 }
