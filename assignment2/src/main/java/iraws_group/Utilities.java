@@ -37,7 +37,7 @@ public class Utilities{
 		return GetSearcher(indexPath, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
 	}
 	
-	public static IndexSearcher GetSearcher(String indexPath, Constants.SimilarityClasses similarityClass, float lambda)
+	public static IndexSearcher GetSearcher(String indexPath, Constants.SimilarityClasses similarityClass, float smoothingWeighting)
 	{
 		try 
 		{
@@ -53,11 +53,12 @@ public class Utilities{
                     searcher.setSimilarity(new ClassicSimilarity());
 					break;
 				case LMJelinekMercer:
-					searcher.setSimilarity(new LMJelinekMercerSimilarity(lambda));
+					searcher.setSimilarity(new LMJelinekMercerSimilarity(smoothingWeighting));
 					break;
                 case Dirichlet:
-                default:
-                    searcher.setSimilarity(new LMDirichletSimilarity(lambda));	
+				default:
+					if (smoothingWeighting == DEFAULT_LAMBDA) searcher.setSimilarity(new LMDirichletSimilarity());		
+                    else 									  searcher.setSimilarity(new LMDirichletSimilarity(smoothingWeighting));	
 			}			
 			return searcher;
 		}
@@ -71,7 +72,7 @@ public class Utilities{
 	public static IndexWriter GetIndexWriter(Analyzer analyzer) {
 		return GetIndexWriter(analyzer, DEFAULT_SELECTED_SIMILARITY_CLASS, DEFAULT_LAMBDA);
 	}
-	public static IndexWriter GetIndexWriter(Analyzer analyzer, Constants.SimilarityClasses similarityClass, float lambda)
+	public static IndexWriter GetIndexWriter(Analyzer analyzer, Constants.SimilarityClasses similarityClass, float smoothingWeighting)
 	{
 		try
 		{
@@ -90,11 +91,12 @@ public class Utilities{
                     iwc.setSimilarity(new ClassicSimilarity());
 					break;
 				case LMJelinekMercer:
-					iwc.setSimilarity(new LMJelinekMercerSimilarity(lambda));
+					iwc.setSimilarity(new LMJelinekMercerSimilarity(smoothingWeighting));
 					break;
                 case Dirichlet:
                 default:
-					iwc.setSimilarity(new LMDirichletSimilarity(lambda));
+					if (smoothingWeighting == DEFAULT_LAMBDA) iwc.setSimilarity(new LMDirichletSimilarity());		
+					else 									  iwc.setSimilarity(new LMDirichletSimilarity(smoothingWeighting));
 			}			
 	        IndexWriter writer = new IndexWriter(dir, iwc);
 	        return writer;
